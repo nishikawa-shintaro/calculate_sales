@@ -61,7 +61,7 @@ public class Main {
 					}
 					branchData.put(copy[0],copy[1]);
 					branchSaleMap.put(copy[0],(long)0);
-					//System.out.println(s);									//支店定義ファイルの読み込み内容を確認
+					//System.out.println(s01);									//支店定義ファイルの読み込み内容を確認
 				}
 			}
 			catch(IOException e){
@@ -95,7 +95,7 @@ public class Main {
 					}
 					commodityData.put(copy[0],copy[1]);
 					commoditySaleMap.put(copy[0],(long)0);
-					//System.out.println(s);									//商品定義ファイル読み込んだ内容確認
+					//System.out.println(s02);									//商品定義ファイル読み込んだ内容確認
 				}
 			}
 			catch(IOException e){
