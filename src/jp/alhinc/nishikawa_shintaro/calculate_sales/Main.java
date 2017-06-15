@@ -1,3 +1,4 @@
+
 package jp.alhinc.nishikawa_shintaro.calculate_sales;
 
 import java.io.BufferedReader;
@@ -51,7 +52,7 @@ public class Main {
 				// 分割した文字列が2つであることを確認する
 				if( copy.length != 2 ){
 					System.out.println("支店定義ファイルのフォーマットが不正です");
-					System.exit(1);
+					return;
 				}
 				//支店コードが3桁の数字であることを確認する
 				if(!copy[0].matches(("^[0-9]{3}$"))){
@@ -123,13 +124,13 @@ public class Main {
 		Collections.sort(tempList);
 		Collections.sort(numList);
 		//連番の判定処理を行う
-		for(int i=1;i<numList.size();i++)				//変数iの数値と(i-1)+1がすべて成立するならば連番である
-		{
-			if(numList.get(i)!=numList.get(i-1)+1)
+			for(int i=1;i<numList.size();i++)				//変数iの数値と(i-1)+1がすべて成立するならば連番である
 			{
-				System.out.println("売り上げファイル名が連番になっていません");
+				if(numList.get(i)!=numList.get(i-1)+1)
+				{
+					System.out.println("売り上げファイル名が連番になっていません");
+				}
 			}
-		}
 		//売り上げファイルを読み込む処理
 		//支店ごとの売り上げを集計するファイルの処理
 		//商品ごとの売り上げを集計するファイルの処理
