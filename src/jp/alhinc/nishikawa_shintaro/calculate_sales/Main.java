@@ -33,16 +33,15 @@ public class Main {
 		//商品ごとに売り上げを集計すファイルの宣言
 		HashMap<String,Long>commoditySaleMap= new HashMap<String,Long>();
 
-
+		InputStreamReader in =new InputStreamReader(System.in);
+		BufferedReader reader=new BufferedReader(in);
 		//処理内容1↓
 		//コマンドライン引数でディレクトリを指定
 		//支店定義ファイルの処理
-		InputStreamReader in =new InputStreamReader(System.in);
-		BufferedReader reader=new BufferedReader(in);
 		try{
 			File file=new File(args[0],"branch.lst");
 			if(!file.exists()){
-				System.out.println("支店定義ファイルが存在しません");   			 //ファイルの判定処理を行う
+				System.out.println("支店定義ファイルが存在しません");   //ファイルの判定処理を行う
 			}
 			String s;
 			FileReader fr=new FileReader(file);
@@ -57,7 +56,7 @@ public class Main {
 				//支店コードが3桁の数字であることを確認する
 				if(!copy[0].matches(("^[0-9]{3}$"))){
 					System.out.println("支店定義ファイルのフォーマットが不正です");
-					return;										//	処理を異常終了とする
+					return;												//	処理を異常終了とする
 				}
 				branchData.put(copy[0],copy[1]);
 				branchSaleMap.put(copy[0],(long)0);
@@ -74,7 +73,7 @@ public class Main {
 		try{
 			File file=new File(args[0],"commodity.lst");
 			if(!file.exists()){
-				System.out.println("商品定義ファイルが存在しません");    			//ファイルの判定処理を行う
+				System.out.println("商品定義ファイルが存在しません");    //ファイルの判定処理を行う
 			}
 			String s;
 			FileReader fr=new FileReader(file);
@@ -93,7 +92,7 @@ public class Main {
 				}
 				commodityData.put(copy[0],copy[1]);
 				commoditySaleMap.put(copy[0],(long)0);
-				System.out.println(s);								//商品定義ファイル読み込んだ内容確認
+				System.out.println(s);									//商品定義ファイル読み込んだ内容確認
 			}
 			br.close();
 			}
@@ -104,9 +103,9 @@ public class Main {
 	//処理内容3↓
 	//売り上げファイルを選別し読み込む処理
 		File folder=new File(args[0]);
-		String[] list=folder.list();      						//fileListにargs引数内フォルダの一覧を格納する
+		String[] list=folder.list();      							//fileListにargs引数内フォルダの一覧を格納する
 		ArrayList<String>tempList=new ArrayList<String>();
-		List<Integer>numList=new ArrayList<Integer>();			//連番判定用のInteger型のListを作る
+		List<Integer>numList=new ArrayList<Integer>();				//連番判定用のInteger型のListを作る
 		for(String str :list)
 		{
 			if(str.matches("^.+.\\.rcd$"))                          //.rdc拡張子を持つファイルを抽出
@@ -124,7 +123,7 @@ public class Main {
 		Collections.sort(tempList);
 		Collections.sort(numList);
 		//連番の判定処理を行う
-			for(int i=1;i<numList.size();i++)				//変数iの数値と(i-1)+1がすべて成立するならば連番である
+			for(int i=1;i<numList.size();i++)					//変数iの数値と(i-1)+1がすべて成立するならば連番である
 			{
 				if(numList.get(i)!=numList.get(i-1)+1)
 				{
@@ -182,9 +181,8 @@ public class Main {
 		}
 		catch(IOException e){
 			System.out.println("予期せぬエラーが発生しました");
-			}
-
-
+			return;
+		}
 		//処理内容4
 		//支店別集計ファイルの作成/出力を行う処理
 		File file=new File(args[0],"branch.out");
@@ -211,10 +209,10 @@ public class Main {
 	            //出力内容を確認する
 	            System.out.println(s.getKey()+","+branchData.get(s.getKey())+","+s.getValue());
 	        }
-			pw.close();
 		}
 		catch(IOException e){
 		System.out.println("予期せぬエラーが発生しました");
+		return;
 		}
 		//商品別集計ファイルの作成/出力を行う処理
 		File file2=new File(args[0],"commodity.out");
@@ -247,6 +245,7 @@ public class Main {
 		}
 		catch(IOException e){
 		System.out.println("予期せぬエラーが発生しました");
+		return;
 		}
 	}
 }
