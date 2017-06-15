@@ -60,7 +60,7 @@ public class Main {
 				}
 				branchData.put(copy[0],copy[1]);
 				branchSaleMap.put(copy[0],(long)0);
-				System.out.println(s);									//支店定義ファイルの読み込み内容を確認
+				//System.out.println(s);									//支店定義ファイルの読み込み内容を確認
 			}
 			br.close();
 			}
@@ -92,7 +92,7 @@ public class Main {
 				}
 				commodityData.put(copy[0],copy[1]);
 				commoditySaleMap.put(copy[0],(long)0);
-				System.out.println(s);									//商品定義ファイル読み込んだ内容確認
+				//System.out.println(s);									//商品定義ファイル読み込んだ内容確認
 			}
 			br.close();
 			}
@@ -207,7 +207,7 @@ public class Main {
 			for (Entry<String,Long> s : sortbranchSaleMap) {
 	            pw.println(s.getKey()+","+branchData.get(s.getKey())+","+s.getValue());
 	            //出力内容を確認する
-	            System.out.println(s.getKey()+","+branchData.get(s.getKey())+","+s.getValue());
+	            //System.out.println(s.getKey()+","+branchData.get(s.getKey())+","+s.getValue());
 	        }
 		}
 		catch(IOException e){
@@ -239,7 +239,7 @@ public class Main {
 			for (Entry<String,Long> s : sortcommoditySaleMap) {
 	            pw.println(s.getKey()+","+commodityData.get(s.getKey())+","+s.getValue());
 	            //出力内容を確認する
-	            System.out.println(s.getKey()+","+commodityData.get(s.getKey())+","+s.getValue());
+	            //System.out.println(s.getKey()+","+commodityData.get(s.getKey())+","+s.getValue());
 	        }
 			pw.close();
 		}
