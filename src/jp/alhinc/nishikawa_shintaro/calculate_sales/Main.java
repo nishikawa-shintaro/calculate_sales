@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,23 +31,13 @@ public class Main {
 		HashMap<String, Long>branchSaleMap= new HashMap<String,Long>();
 		//商品ごとに売り上げを集計すファイルの宣言
 		HashMap<String,Long>commoditySaleMap= new HashMap<String,Long>();
-		
-		InputStreamReader in =new InputStreamReader(System.in);
-		BufferedReader reader=new BufferedReader(in);
+
 		//branchファイルの読み込み処理
-		if(reader(args[0],"branch.lst",branchMap,branchSaleMap,"支店")){
+		if(!reader(args[0],"branch.lst",branchMap,branchSaleMap,"^[0-9]{3}$","支店")){
 			return;
 		}
 		//commodityファイルの読み込み
-		if(reader(args[0],"commodity.lst",commodityMap,commoditySaleMap,"商品")){
-			return;
-		}
-		//集計結果出力処理
-		if(output( branchMap,args[0],"branch.out",branchSaleMap)){
-			return;
-		}
-		//集計結果出力処理
-		if(output(commodityMap,args[0],"commodity.out",commoditySaleMap)){
+		if(!reader(args[0],"commodity.lst",commodityMap,commoditySaleMap,"^[A-Z a-z 0-9]{8}$","商品")){
 			return;
 		}
 		//売り上げファイルを選別し読み込む処理
@@ -138,16 +127,24 @@ public class Main {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
 		}
+		//集計結果出力処理
+		if(!output( branchMap,args[0],"branch.out",branchSaleMap)){
+			return;
+		}
+		//集計結果出力処理
+		if(!output(commodityMap,args[0],"commodity.out",commoditySaleMap)){
+			return;
+		}
 	}
 	//ファイル出力メソッド
 	public static boolean output(HashMap<String,String> name,String dir,String fileName,HashMap<String,Long> sales){
 		//支店別集計ファイルの作成/出力を行う処理
-		PrintWriter pw04 = null;
+		PrintWriter pw = null;
 		try{
-			File file04 = new File(dir,fileName);
+			File file = new File(dir,fileName);
 
-			if(!file04.exists()){
-				file04.createNewFile(); 	//ファイルが存在しなければ新しく作成する
+			if(!file.exists()){
+				file.createNewFile(); 	//ファイルが存在しなければ新しく作成する
 			}
 			//branchSaleMapを降順にソートする
 			List<Map.Entry <String,Long> > sortbranchSaleMap =new ArrayList <Map.Entry <String,Long> >
@@ -158,27 +155,27 @@ public class Main {
 				return ((Long)entry2.getValue() ).compareTo((Long)entry1.getValue() );
 			}
 			});
-			FileWriter fw04=new FileWriter(file04);
-			BufferedWriter bw04= new BufferedWriter(fw04);
-			pw04 = new PrintWriter(bw04);
+			FileWriter fw=new FileWriter(file);
+			BufferedWriter bw04= new BufferedWriter(fw);
+			pw = new PrintWriter(bw04);
 				//支店別集計ファイルに出力する
 			for (Entry<String,Long> s : sortbranchSaleMap) {
-				pw04.println(s.getKey()+","+name.get(s.getKey())+","+s.getValue());
+				pw.println(s.getKey()+","+name.get(s.getKey())+","+s.getValue());
 				//出力内容を確認する
-				//System.out.println(s.getKey()+","+name.get(s.getKey())+","+s.getValue());
+				System.out.println(s.getKey()+","+name.get(s.getKey())+","+s.getValue());
 			}
 		} catch (IOException e) {
 			System.out.println("予期せぬエラーが発生しました。");
 			return false;
 		}finally{
-			pw04.close();
+			pw.close();
 		}
 		return true;
 	}
-	//ファイルリードメソッド
-	public static boolean reader(String dir,String fileName,HashMap<String,String> 
-	read,HashMap<String,Long> sales,String code){
-		BufferedReader br=null; 
+	//ファイルreaderメソッド
+	public static boolean reader(String dir,String fileName,HashMap<String,String>
+	read,HashMap<String,Long> sales,String condition,String code){
+		BufferedReader br=null;
 		try{
 				File file=new File(dir,fileName);
 				if(!file.exists()){
@@ -195,14 +192,13 @@ public class Main {
 						System.out.println(code+"定義ファイルのフォーマットが不正です");
 						return false;
 					}
-					//支店コードが3桁の数字であることを確認する
-					if(!copy[0].matches(("^[0-9]{3}$"))){
+					if(!copy[0].matches((condition))){
 						System.out.println(code+"定義ファイルのフォーマットが不正です");
 						return false;
 					}
 					read.put(copy[0],copy[1]);
 					sales.put(copy[0],(long)0);
-					//System.out.println(s);
+					System.out.println(s);
 				}
 		}catch(IOException e){
 			System.out.println("予期せぬエラーが発生しました");
