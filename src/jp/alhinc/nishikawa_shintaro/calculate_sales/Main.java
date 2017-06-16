@@ -192,7 +192,7 @@ public class Main {
 						System.out.println(code+"定義ファイルのフォーマットが不正です");
 						return false;
 					}
-					if(!copy[0].matches((condition))){
+					if(!copy[0].matches(condition)){
 						System.out.println(code+"定義ファイルのフォーマットが不正です");
 						return false;
 					}
