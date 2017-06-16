@@ -22,8 +22,8 @@ public class Main {
 		//コマンドライン引数チェック
 		if(args.length !=1){
 			System.out.println("予期せぬエラーが発生しました");
+			return;
 		}
-
 		//branchファイルデータを格納するmapの宣言
 		HashMap<String, String>branchMap= new HashMap<String,String>();
 		//commodityファイルデータを格納するmapの宣言
@@ -35,20 +35,19 @@ public class Main {
 
 		InputStreamReader in =new InputStreamReader(System.in);
 		BufferedReader reader=new BufferedReader(in);
-		//処理内容1↓
-		//コマンドライン引数でディレクトリを指定
-		//支店定義ファイルの処理
+		//支店定義ファイルの読み込み処理
 		try{
 			File file01=new File(args[0],"branch.lst");
 			if(!file01.exists()){
-				System.out.println("支店定義ファイルが存在しません");   //ファイルの判定処理を行う
+				System.out.println("支店定義ファイルが存在しません");   
+				return;
 			}
 			FileReader fr01=new FileReader(file01);
 			BufferedReader br01=new BufferedReader(fr01);
 			String s01;
 			try{
-				while((s01=br01.readLine())!=null){	   							//ファイルデータを一列ずつ読み込む
-					String[]copy=s01.split(",",0);                     		//配列で格納し読み込まれた行を，で区切る
+				while((s01=br01.readLine())!=null){	   							
+					String[]copy=s01.split(",",0);                     		
 					// 分割した文字列が2つであることを確認する
 					if( copy.length != 2 ){
 						System.out.println("支店定義ファイルのフォーマットが不正です");
@@ -57,11 +56,11 @@ public class Main {
 					//支店コードが3桁の数字であることを確認する
 					if(!copy[0].matches(("^[0-9]{3}$"))){
 						System.out.println("支店定義ファイルのフォーマットが不正です");
-						return;												//	処理を異常終了とする
+						return;
 					}
 					branchMap.put(copy[0],copy[1]);
 					branchSaleMap.put(copy[0],(long)0);
-					//System.out.println(s01);									//支店定義ファイルの読み込み内容を確認
+					//System.out.println(s01);
 				}
 			}
 			catch(IOException e){
@@ -70,20 +69,18 @@ public class Main {
 			finally{
 				br01.close();
 			}
-
-		//処理内容2↓
 		//商品定義ファイルの処理
-			File file02=new File(args[0],"commodity.lst");
-			if(!file02.exists()){
-				System.out.println("商品定義ファイルが存在しません");    //ファイルの判定処理を行う
-			}
-			FileReader fr02=new FileReader(file02);
-			BufferedReader br02=new BufferedReader(fr02);
-			try{
-				String s02;
-				while((s02=br02.readLine())!=null){	   							//ファイルデータを一列ずつ読み込む
-					String[]copy=s02.split(",",0);                     	 	//配列で格納し読み込まれた行を，で区切る
-					// 分割した文字列が2つであることを確認する
+		File file02=new File(args[0],"commodity.lst");
+		if(!file02.exists()){
+			System.out.println("商品定義ファイルが存在しません");
+		}
+		FileReader fr02=new FileReader(file02);
+		BufferedReader br02=new BufferedReader(fr02);
+		try{
+			String s02;
+			while((s02=br02.readLine())!=null){
+				String[]copy=s02.split(",",0);
+				// 分割した文字列が2つであることを確認する
 					if( copy.length != 2 ){
 						System.out.println("商品定義ファイルのフォーマットが不正です");
 						return;
@@ -95,49 +92,41 @@ public class Main {
 					}
 					commodityMap.put(copy[0],copy[1]);
 					commoditySaleMap.put(copy[0],(long)0);
-					//System.out.println(s02);									//商品定義ファイル読み込んだ内容確認
-				}
+					//System.out.println(s02);
 			}
-			catch(IOException e){
+		}catch(IOException e){
 				System.out.println("予期せぬエラーが発生しました");
-			}
-			finally{
-				br02.close();
-			}
+		}finally{
+			br02.close();
+		}
 		}
 		catch(IOException e){
 		System.out.println("予期せぬエラーが発生しました");
-		}
-	
-
-		//処理内容3↓
+		}	
 		//売り上げファイルを選別し読み込む処理
-			File folder=new File(args[0]);
-			String[] list=folder.list();      							//fileListにargs引数内フォルダの一覧を格納する
-			ArrayList<String>tempList=new ArrayList<String>();
-			List<Integer>numList=new ArrayList<Integer>();				//連番判定用のInteger型のListを作る
-			for(String str :list)
-			{
-				if(str.matches("^.+.\\.rcd$"))                          //.rdc拡張子を持つファイルを抽出
-				{
-					if(!(str.matches("^[0-9]{8}\\.rcd$")))    			//rcdかつ8文字列を持っているファイルを抽出
-					{
+		File folder=new File(args[0]);
+		String[] list=folder.list();
+		ArrayList<String>tempList=new ArrayList<String>();
+		//連番判定用のInteger型のListを作る
+		List<Integer>numList=new ArrayList<Integer>();
+		for(String str :list){
+			if(str.matches("^.+.\\.rcd$")){
+					if(!(str.matches("^[0-9]{8}\\.rcd$"))){
 						System.out.println("売り上げファイル名のフォーマットが不正です");
 					}
-						tempList.add(str);								//rcdファイルをArrayListクラスに格納
-						//文字列の8桁を取り出しListに格納する
-						numList.add(Integer.parseInt(str.substring(0,8)));
+					//rcdファイルをArrayListクラスに格納
+					tempList.add(str);
+					//文字列の8桁を取り出しListに格納する
+					numList.add(Integer.parseInt(str.substring(0,8)));
 				}
 			}
-			//TempListを昇順に並べ替える
-			Collections.sort(tempList);
-			Collections.sort(numList);
-			//連番の判定処理を行う
-			for(int i=1;i<numList.size();i++)					//変数iの数値と(i-1)+1がすべて成立するならば連番である
-			{
-				if(numList.get(i)!=numList.get(i-1)+1)
-				{
-					System.out.println("売り上げファイル名が連番になっていません");
+		//TempListを昇順に並べ替える
+		Collections.sort(tempList);
+		Collections.sort(numList);
+		//連番の判定処理を行う//変数iの数値と(i-1)+1がすべて成立するならば連番である
+		for(int i=1;i<numList.size();i++){
+				if(numList.get(i)!=numList.get(i-1)+1){
+					System.out.println("売上ファイル名が連番になっていません");
 				}
 			}
 		//売り上げファイルを読み込む処理
@@ -148,6 +137,7 @@ public class Main {
 				File file03=new File(args[0],tempList.get(i));
 				if(!file03.exists()){
 					System.out.println("ファイルが存在しません");
+					return;
 				}
 				FileReader fr03=new FileReader(file03);
 				BufferedReader br03=new BufferedReader(fr03);
@@ -179,25 +169,22 @@ public class Main {
 							(rcdData.get(1),Long.parseLong(rcdData.get(2))+commoditySaleMap.get(rcdData.get(1)));
 					//10桁を超えたら読み込みを中断する
 					if (branchSaleMap.get(rcdData.get(0)) > (long)999999999) {
-						System.out.println("合計金額が十桁を超えました");
+						System.out.println("合計金額が10桁を超えました");
 						return;
 					}
 					//10桁を超えたら読み込みを中断する
 					if (commoditySaleMap.get(rcdData.get(1)) > (long)999999999) {
-						System.out.println("合計金額が十桁を超えました");
+						System.out.println("合計金額が10桁を超えました");
 						return;
 					}
-				}
-				catch(IOException e){
+				}catch(IOException e){
 					System.out.println("予期せぬエラーが発生しました");
 					return;
-				}
-				finally{
+				}finally{
 					br03.close();
 				}
 			}
-		}
-		catch(IOException e){
+		}catch(IOException e){
 			System.out.println("予期せぬエラーが発生しました");
 		}
 		//処理内容4
@@ -239,8 +226,7 @@ public class Main {
 			List<Map.Entry <String,Long> > sortcommoditySaleMap =new ArrayList <Map.Entry <String,Long> >
 																						(commoditySaleMap.entrySet() );
 			Collections.sort(sortcommoditySaleMap, new Comparator<Map.Entry <String,Long> >() {
-			public int compare(
-						Entry <String,Long> entry1, Entry <String,Long> entry2) {
+			public int compare(	Entry <String,Long> entry1, Entry <String,Long> entry2) {
 					return ((Long)entry2.getValue() ).compareTo((Long)entry1.getValue() );
 				}
 			});
