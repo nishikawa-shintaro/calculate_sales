@@ -36,11 +36,11 @@ public class Main {
 		InputStreamReader in =new InputStreamReader(System.in);
 		BufferedReader reader=new BufferedReader(in);
 		//branchファイルの読み込み処理
-		if(reader(args[0],"branch.lst",branchMap,branchSaleMap)){
+		if(reader(args[0],"branch.lst",branchMap,branchSaleMap,"支店")){
 			return;
 		}
 		//commodityファイルの読み込み
-		if(reader(args[0],"commodity.lst",commodityMap,commoditySaleMap)){
+		if(reader(args[0],"commodity.lst",commodityMap,commoditySaleMap,"商品")){
 			return;
 		}
 		//集計結果出力処理
@@ -51,7 +51,6 @@ public class Main {
 		if(output(commodityMap,args[0],"commodity.out",commoditySaleMap)){
 			return;
 		}
-
 		//売り上げファイルを選別し読み込む処理
 		File folder=new File(args[0]);
 		String[] list=folder.list();
@@ -62,6 +61,7 @@ public class Main {
 			if(str.matches("^.+.\\.rcd$")){
 					if(!(str.matches("^[0-9]{8}\\.rcd$"))){
 						System.out.println("売り上げファイル名のフォーマットが不正です");
+						return;
 					}
 					//rcdファイルをArrayListクラスに格納
 					tempList.add(str);
@@ -76,6 +76,7 @@ public class Main {
 		for(int i=1;i<numList.size();i++){
 				if(numList.get(i)!=numList.get(i-1)+1){
 					System.out.println("売上ファイル名が連番になっていません");
+					return;
 				}
 			}
 		//売り上げファイルを読み込む処理
@@ -135,6 +136,7 @@ public class Main {
 			}
 		}catch(IOException e){
 			System.out.println("予期せぬエラーが発生しました");
+			return;
 		}
 	}
 	//ファイル出力メソッド
@@ -174,12 +176,13 @@ public class Main {
 		return true;
 	}
 	//ファイルリードメソッド
-	public static boolean reader(String dir,String fileName,HashMap<String,String> read,HashMap<String,Long> sales){
+	public static boolean reader(String dir,String fileName,HashMap<String,String> 
+	read,HashMap<String,Long> sales,String code){
 		BufferedReader br=null; 
 		try{
 				File file=new File(dir,fileName);
 				if(!file.exists()){
-				System.out.println("支店定義ファイルが存在しません");
+				System.out.println(code+"定義ファイルが存在しません");
 				return false;
 				}
 				FileReader fr=new FileReader(file);
@@ -189,12 +192,12 @@ public class Main {
 					String[]copy=s.split(",",0);
 					// 分割した文字列が2つであることを確認する
 					if( copy.length != 2 ){
-						System.out.println("支店定義ファイルのフォーマットが不正です");
+						System.out.println(code+"定義ファイルのフォーマットが不正です");
 						return false;
 					}
 					//支店コードが3桁の数字であることを確認する
 					if(!copy[0].matches(("^[0-9]{3}$"))){
-						System.out.println("支店定義ファイルのフォーマットが不正です");
+						System.out.println(code+"定義ファイルのフォーマットが不正です");
 						return false;
 					}
 					read.put(copy[0],copy[1]);
@@ -203,11 +206,13 @@ public class Main {
 				}
 		}catch(IOException e){
 			System.out.println("予期せぬエラーが発生しました");
+			return false;
 		}finally{
 			try {
 				br.close();
 			} catch (IOException e) {
 				System.out.println("予期せぬエラーが発生しました");
+				return false;
 			}
 		}
 		return true;
