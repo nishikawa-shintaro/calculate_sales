@@ -25,9 +25,9 @@ public class Main {
 		}
 
 		//branchファイルデータを格納するmapの宣言
-		HashMap<String, String>branchData= new HashMap<String,String>();
+		HashMap<String, String>branchMap= new HashMap<String,String>();
 		//commodityファイルデータを格納するmapの宣言
-		HashMap<String, String>commodityData= new HashMap<String,String>();
+		HashMap<String, String>commodityMap= new HashMap<String,String>();
 		//支店ごとの売り上げを集計するMapの宣言
 		HashMap<String, Long>branchSaleMap= new HashMap<String,Long>();
 		//商品ごとに売り上げを集計すファイルの宣言
@@ -59,7 +59,7 @@ public class Main {
 						System.out.println("支店定義ファイルのフォーマットが不正です");
 						return;												//	処理を異常終了とする
 					}
-					branchData.put(copy[0],copy[1]);
+					branchMap.put(copy[0],copy[1]);
 					branchSaleMap.put(copy[0],(long)0);
 					//System.out.println(s01);									//支店定義ファイルの読み込み内容を確認
 				}
@@ -93,7 +93,7 @@ public class Main {
 						System.out.println("商品定義ファイルのフォーマットが不正です");
 						return;
 					}
-					commodityData.put(copy[0],copy[1]);
+					commodityMap.put(copy[0],copy[1]);
 					commoditySaleMap.put(copy[0],(long)0);
 					//System.out.println(s02);									//商品定義ファイル読み込んだ内容確認
 				}
@@ -163,12 +163,12 @@ public class Main {
 						return;
 					}
 					//不正な支店コードをチェックする
-					if(!branchData.containsKey(rcdData.get(0))){
+					if(!branchMap.containsKey(rcdData.get(0))){
 						System.out.println(file03.getName()+"のフォーマットが不正です");
 						return;
 					}
 					//不正な商品コードをチェックする
-					if(!commodityData.containsKey(rcdData.get(1))){
+					if(!commodityMap.containsKey(rcdData.get(1))){
 						System.out.println(file03.getName()+"のフォーマットが不正です");
 						return;
 					}
@@ -222,9 +222,9 @@ public class Main {
 				try{
 					//支店別集計ファイルに出力する
 					for (Entry<String,Long> s : sortbranchSaleMap) {
-						pw04.println(s.getKey()+","+branchData.get(s.getKey())+","+s.getValue());
+						pw04.println(s.getKey()+","+branchMap.get(s.getKey())+","+s.getValue());
 						//出力内容を確認する
-						//System.out.println(s.getKey()+","+branchData.get(s.getKey())+","+s.getValue());
+						//System.out.println(s.getKey()+","+branchMap.get(s.getKey())+","+s.getValue());
 					}
 				}
 				finally{
@@ -250,9 +250,9 @@ public class Main {
 			try{
 				////商品別集計ファイルに出力する
 				for (Entry<String,Long> s : sortcommoditySaleMap) {
-					pw05.println(s.getKey()+","+commodityData.get(s.getKey())+","+s.getValue());
+					pw05.println(s.getKey()+","+commodityMap.get(s.getKey())+","+s.getValue());
 					//出力内容を確認する
-					//System.out.println(s.getKey()+","+commodityData.get(s.getKey())+","+s.getValue());
+					//System.out.println(s.getKey()+","+commodityMap.get(s.getKey())+","+s.getValue());
 				}
 			}
 			finally{
@@ -265,4 +265,3 @@ public class Main {
 		}
 	}
 }
-
