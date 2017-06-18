@@ -73,32 +73,32 @@ public class Main {
 		//商品ごとの売り上げを集計するファイルの処理
 		try{
 			for(int i=0;i<tempList.size();i++) {
-				File file03=new File(args[0],tempList.get(i));
-				if(!file03.exists()){
+				File file=new File(args[0],tempList.get(i));
+				if(!file.exists()){
 					System.out.println("ファイルが存在しません");
 					return;
 				}
-				FileReader fr03=new FileReader(file03);
-				BufferedReader br03=new BufferedReader(fr03);
+				FileReader fr=new FileReader(file);
+				BufferedReader br=new BufferedReader(fr);
 				try{
 					String str;
 					ArrayList<String>rcdData=new ArrayList<String>();       //rdcファイル中身を格納するListを作る
-					while((str=br03.readLine())!=null){
+					while((str=br.readLine())!=null){
 						rcdData.add(str);									//１行ずつファイルを読み込む
 					}
 					// 売上ファイルが3行であることを確認する
 					if( rcdData.size() != 3 ){
-						System.out.println(file03.getName() + "のフォーマットが不正です");
+						System.out.println(file.getName() + "のフォーマットが不正です");
 						return;
 					}
 					//不正な支店コードをチェックする
 					if(!branchMap.containsKey(rcdData.get(0))){
-						System.out.println(file03.getName()+"のフォーマットが不正です");
+						System.out.println(file.getName()+"のフォーマットが不正です");
 						return;
 					}
 					//不正な商品コードをチェックする
 					if(!commodityMap.containsKey(rcdData.get(1))){
-						System.out.println(file03.getName()+"のフォーマットが不正です");
+						System.out.println(file.getName()+"のフォーマットが不正です");
 						return;
 					}
 					//支店毎の売り上げ集計を行う
@@ -120,7 +120,7 @@ public class Main {
 					System.out.println("予期せぬエラーが発生しました");
 					return;
 				}finally{
-					br03.close();
+					br.close();
 				}
 			}
 		}catch(IOException e){
@@ -156,8 +156,8 @@ public class Main {
 			}
 			});
 			FileWriter fw=new FileWriter(file);
-			BufferedWriter bw04= new BufferedWriter(fw);
-			pw = new PrintWriter(bw04);
+			BufferedWriter bw= new BufferedWriter(fw);
+			pw = new PrintWriter(bw);
 				//支店別集計ファイルに出力する
 			for (Entry<String,Long> s : sortbranchSaleMap) {
 				pw.println(s.getKey()+","+name.get(s.getKey())+","+s.getValue());
