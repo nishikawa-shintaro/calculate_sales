@@ -162,7 +162,7 @@ public class Main {
 			for (Entry<String,Long> s : sortbranchSaleMap) {
 				pw.println(s.getKey()+","+name.get(s.getKey())+","+s.getValue());
 				//出力内容を確認する
-				System.out.println(s.getKey()+","+name.get(s.getKey())+","+s.getValue());
+				//System.out.println(s.getKey()+","+name.get(s.getKey())+","+s.getValue());
 			}
 		} catch (IOException e) {
 			System.out.println("予期せぬエラーが発生しました。");
@@ -198,7 +198,7 @@ public class Main {
 					}
 					read.put(copy[0],copy[1]);
 					sales.put(copy[0],(long)0);
-					System.out.println(s);
+					//System.out.println(s);
 				}
 		}catch(IOException e){
 			System.out.println("予期せぬエラーが発生しました");
