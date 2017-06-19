@@ -49,7 +49,7 @@ public class Main {
 				if(filegain[i].getName().matches("^[0-9]{8}.rcd$") && filegain[i].isFile() ){
 					//取得した文字列を分割しそれぞれ格納
 					String[] rcddata = filegain[i].getName().split("\\.");
-					numList.add(Integer.valueOf(rcddata[0]) );
+					numList.add(Integer.parseInt(rcddata[0]) );
 					tempList.add(filegain[i].getName());
 				}
 			}
