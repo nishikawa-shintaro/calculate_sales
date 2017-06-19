@@ -85,7 +85,7 @@ public class Main {
 						System.out.println(file.getName() + "のフォーマットが不正です");
 						return;
 					}
-					//売り上げ数値が数値であるかチェックする
+					//売り上げ金額が数値であるかチェックする
 					if (!rcdData.get(2).matches("^[0-9]*$") ) {
 						System.out.println("売り上げ金額が数値になっていません");
 						return;
