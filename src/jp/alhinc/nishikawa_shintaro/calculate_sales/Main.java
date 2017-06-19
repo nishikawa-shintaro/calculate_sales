@@ -53,7 +53,7 @@ public class Main {
 					tempList.add(filegain[i].getName());
 				}
 			}
-			//TempListを昇順に並べ替える
+			//numListを昇順に並べ替える
 			Collections.sort(numList);
 			//連番の判定処理を行う//変数iの数値と(i-1)+1がすべて成立するならば連番である
 			for(int i=1;i<numList.size();i++){
@@ -62,7 +62,6 @@ public class Main {
 					return;
 					}
 			}
-		//売り上げファイルを読み込む処理
 		//支店ごとの売り上げを集計するファイルの処理
 		//商品ごとの売り上げを集計するファイルの処理
 		try{
@@ -87,17 +86,17 @@ public class Main {
 					}
 					//売り上げ金額が数値であるかチェックする
 					if (!rcdData.get(2).matches("^[0-9]*$") ) {
-						System.out.println(file.getName()+"の売り上げ金額が数値になっていません");
+						System.out.println("予期せぬエラーが発生しました");
 						return;
 					}
 					//不正な支店コードをチェックする
 					if(!branchMap.containsKey(rcdData.get(0))){
-						System.out.println(file.getName()+"のフォーマットが不正です");
+						System.out.println(file.getName()+"の支店コードが不正です");
 						return;
 					}
 					//不正な商品コードをチェックする
 					if(!commodityMap.containsKey(rcdData.get(1))){
-						System.out.println(file.getName()+"のフォーマットが不正です");
+						System.out.println(file.getName()+"の商品コードが不正です");
 						return;
 					}
 					//支店毎の売り上げ集計を行う
@@ -106,20 +105,24 @@ public class Main {
 					commoditySaleMap.put
 							(rcdData.get(1),Long.parseLong(rcdData.get(2))+commoditySaleMap.get(rcdData.get(1)));
 					//10桁を超えたら読み込みを中断する
-					if (branchSaleMap.get(rcdData.get(0)) > (long)999999999) {
+					if (branchSaleMap.get(rcdData.get(0)) > 9999999999L) {
 						System.out.println("合計金額が10桁を超えました");
 						return;
 					}
 					//10桁を超えたら読み込みを中断する
-					if (commoditySaleMap.get(rcdData.get(1)) > (long)999999999) {
+					if (commoditySaleMap.get(rcdData.get(1)) > 9999999999L) {
 						System.out.println("合計金額が10桁を超えました");
 						return;
 					}
 				}catch(IOException e){
 					System.out.println("予期せぬエラーが発生しました");
 					return;
-				}finally{
-					br.close();
+				} finally {
+					if(br != null){
+						br.close();
+					} else {
+						return;
+					}
 				}
 			}
 		}catch(IOException e){
@@ -164,16 +167,20 @@ public class Main {
 				//System.out.println(s.getKey()+","+name.get(s.getKey())+","+s.getValue());
 			}
 		} catch (IOException e) {
-			System.out.println("予期せぬエラーが発生しました。");
+			System.out.println("予期せぬエラーが発生しました");
 			return false;
-		}finally{
-			pw.close();
+		} finally {
+			if(pw != null){
+				pw.close();
+			} else {
+				return false;
+			}
 		}
 		return true;
 	}
 	//ファイルreaderメソッド
 	public static boolean reader(String dir,String fileName,HashMap<String,String>
-	read,HashMap<String,Long> sales,String condition,String code){
+	read,HashMap<String,Long> sales,String condition,String code) {
 		BufferedReader br=null;
 		try{
 				File file=new File(dir,fileName);
@@ -202,13 +209,15 @@ public class Main {
 		}catch(IOException e){
 			System.out.println("予期せぬエラーが発生しました");
 			return false;
-		}finally{
-			try {
-				br.close();
-			} catch (IOException e) {
-				System.out.println("予期せぬエラーが発生しました");
-				return false;
-			}
+		} finally {
+		      try {
+		        if (br != null) {
+		          br.close();
+		        }
+		      } catch (IOException e) {
+		    	  System.out.println("予期せぬエラーが発生しました");
+		        return false;
+		      }
 		}
 		return true;
 	}
