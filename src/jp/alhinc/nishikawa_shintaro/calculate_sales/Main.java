@@ -1,5 +1,3 @@
-
-
 package jp.alhinc.nishikawa_shintaro.calculate_sales;
 
 import java.io.BufferedReader;
@@ -42,32 +40,27 @@ public class Main {
 			return;
 		}
 		//売り上げファイルを選別し読み込む処理
-		File folder=new File(args[0]);
-		String[] list=folder.list();
-		ArrayList<String>tempList=new ArrayList<String>();
-		//連番判定用のInteger型のListを作る
-		List<Integer>numList=new ArrayList<Integer>();
-		for(String str :list){
-			if(str.matches("^.+.\\.rcd$")){
-					if(!(str.matches("^[0-9]{8}\\.rcd$"))){
-						System.out.println("売り上げファイル名のフォーマットが不正です");
-						return;
-					}
-					//rcdファイルをArrayListクラスに格納
-					tempList.add(str);
-					//文字列の8桁を取り出しListに格納する
-					numList.add(Integer.parseInt(str.substring(0,8)));
+			File rcdFile = new File(args[0]);
+			File[] filecheck = rcdFile.listFiles();
+			//売り上げファイルの格納
+			ArrayList <Integer> numList = new ArrayList <Integer>();
+			ArrayList <String> tempList = new ArrayList <String>();
+			for(int i=0; i <filecheck.length; i++){
+				if(filecheck[i].getName().matches("^[0-9]{8}.rcd$") && filecheck[i].isFile() ){
+					//取得した文字列を分割しそれぞれ格納
+					String[] rcddata = filecheck[i].getName().split("\\.");
+					numList.add(Integer.valueOf(rcddata[0]) );
+					tempList.add(filecheck[i].getName());
 				}
 			}
-		//TempListを昇順に並べ替える
-		Collections.sort(tempList);
-		Collections.sort(numList);
-		//連番の判定処理を行う//変数iの数値と(i-1)+1がすべて成立するならば連番である
-		for(int i=1;i<numList.size();i++){
+			//TempListを昇順に並べ替える
+			Collections.sort(numList);
+			//連番の判定処理を行う//変数iの数値と(i-1)+1がすべて成立するならば連番である
+			for(int i=1;i<numList.size();i++){
 				if(numList.get(i)!=numList.get(i-1)+1){
 					System.out.println("売上ファイル名が連番になっていません");
 					return;
-				}
+					}
 			}
 		//売り上げファイルを読み込む処理
 		//支店ごとの売り上げを集計するファイルの処理
