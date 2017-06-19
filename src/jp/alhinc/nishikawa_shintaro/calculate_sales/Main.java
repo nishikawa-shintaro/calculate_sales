@@ -41,16 +41,16 @@ public class Main {
 		}
 		//売り上げファイルを選別し読み込む処理
 			File rcdFile = new File(args[0]);
-			File[] filecheck = rcdFile.listFiles();
+			File[] filegain = rcdFile.listFiles();
 			//売り上げファイルの格納
 			ArrayList <Integer> numList = new ArrayList <Integer>();
 			ArrayList <String> tempList = new ArrayList <String>();
-			for(int i=0; i <filecheck.length; i++){
-				if(filecheck[i].getName().matches("^[0-9]{8}.rcd$") && filecheck[i].isFile() ){
+			for(int i=0; i <filegain.length; i++){
+				if(filegain[i].getName().matches("^[0-9]{8}.rcd$") && filegain[i].isFile() ){
 					//取得した文字列を分割しそれぞれ格納
-					String[] rcddata = filecheck[i].getName().split("\\.");
+					String[] rcddata = filegain[i].getName().split("\\.");
 					numList.add(Integer.valueOf(rcddata[0]) );
-					tempList.add(filecheck[i].getName());
+					tempList.add(filegain[i].getName());
 				}
 			}
 			//TempListを昇順に並べ替える
