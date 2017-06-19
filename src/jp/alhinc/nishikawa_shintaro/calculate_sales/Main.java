@@ -1,4 +1,5 @@
 
+
 package jp.alhinc.nishikawa_shintaro.calculate_sales;
 
 import java.io.BufferedReader;
@@ -89,6 +90,11 @@ public class Main {
 					// 売上ファイルが3行であることを確認する
 					if( rcdData.size() != 3 ){
 						System.out.println(file.getName() + "のフォーマットが不正です");
+						return;
+					}
+					//売り上げ数値が数値であるかチェックする
+					if (!rcdData.get(2).matches("^[0-9]*$") ) {
+						System.out.println("売り上げ金額が数値になっていません");
 						return;
 					}
 					//不正な支店コードをチェックする
