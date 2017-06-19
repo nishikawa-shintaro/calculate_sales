@@ -87,7 +87,7 @@ public class Main {
 					}
 					//売り上げ金額が数値であるかチェックする
 					if (!rcdData.get(2).matches("^[0-9]*$") ) {
-						System.out.println("売り上げ金額が数値になっていません");
+						System.out.println(file.getName()+"の売り上げ金額が数値になっていません");
 						return;
 					}
 					//不正な支店コードをチェックする
